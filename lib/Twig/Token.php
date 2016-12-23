@@ -36,9 +36,9 @@ final class Twig_Token
     const INTERPOLATION_END_TYPE = 11;
 
     /**
-     * @param int    $type   The type of the token
-     * @param string $value  The token value
-     * @param int    $lineno The line position in the source
+     * @param int               $type   The type of the token
+     * @param string|int|double $value  The token value
+     * @param int               $lineno The line position in the source
      */
     public function __construct($type, $value, $lineno)
     {
@@ -62,10 +62,8 @@ final class Twig_Token
      *
      * @param array|int         $type   The type to test
      * @param array|string|null $values The token value
-     *
-     * @return bool
      */
-    public function test($type, $values = null)
+    public function test($type, $values = null): bool
     {
         if (null === $values && !is_int($type)) {
             $values = $type;
@@ -79,24 +77,18 @@ final class Twig_Token
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getLine()
+    public function getLine(): int
     {
         return $this->lineno;
     }
 
-    /**
-     * @return int
-     */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
 
     /**
-     * @return string
+     * @return string|int|double
      */
     public function getValue()
     {
@@ -105,13 +97,8 @@ final class Twig_Token
 
     /**
      * Returns the constant representation (internal) of a given type.
-     *
-     * @param int  $type  The type as an integer
-     * @param bool $short Whether to return a short representation or not
-     *
-     * @return string The string representation
      */
-    public static function typeToString($type, $short = false)
+    public static function typeToString(int $type, bool $short = false): string
     {
         switch ($type) {
             case self::EOF_TYPE:
@@ -160,14 +147,7 @@ final class Twig_Token
         return $short ? $name : 'Twig_Token::'.$name;
     }
 
-    /**
-     * Returns the English representation of a given type.
-     *
-     * @param int $type The type as an integer
-     *
-     * @return string The string representation
-     */
-    public static function typeToEnglish($type)
+    public static function typeToEnglish(int $type): string
     {
         switch ($type) {
             case self::EOF_TYPE:

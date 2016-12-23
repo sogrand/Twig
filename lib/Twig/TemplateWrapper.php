@@ -35,10 +35,8 @@ final class Twig_TemplateWrapper
      * Renders the template.
      *
      * @param array $context An array of parameters to pass to the template
-     *
-     * @return string The rendered template
      */
-    public function render($context = array())
+    public function render($context = array()): string
     {
         return $this->template->render($context);
     }
@@ -56,12 +54,9 @@ final class Twig_TemplateWrapper
     /**
      * Checks if a block is defined.
      *
-     * @param string $name    The block name
-     * @param array  $context An array of parameters to pass to the template
-     *
-     * @return bool
+     * @param array $context An array of parameters to pass to the template
      */
-    public function hasBlock($name, $context = array())
+    public function hasBlock(string $name, $context = array()): bool
     {
         return $this->template->hasBlock($name, $context);
     }
@@ -81,12 +76,9 @@ final class Twig_TemplateWrapper
     /**
      * Renders a template block.
      *
-     * @param string $name    The block name to render
-     * @param array  $context An array of parameters to pass to the template
-     *
-     * @return string The rendered block
+     * @param array $context An array of parameters to pass to the template
      */
-    public function renderBlock($name, $context = array())
+    public function renderBlock(string $name, $context = array()): string
     {
         $context = $this->env->mergeGlobals($context);
         $level = ob_get_level();
@@ -113,18 +105,14 @@ final class Twig_TemplateWrapper
     /**
      * Displays a template block.
      *
-     * @param string $name    The block name to render
-     * @param array  $context An array of parameters to pass to the template
+     * @param array $context An array of parameters to pass to the template
      */
-    public function displayBlock($name, $context = array())
+    public function displayBlock(string $name, $context = array())
     {
         $this->template->displayBlock($name, $this->env->mergeGlobals($context));
     }
 
-    /**
-     * @return Twig_Source
-     */
-    public function getSourceContext()
+    public function getSourceContext(): Twig_Source
     {
         return $this->template->getSourceContext();
     }

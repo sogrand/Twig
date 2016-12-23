@@ -55,26 +55,12 @@ final class Twig_ExtensionSet
         }
     }
 
-    /**
-     * Returns true if the given extension is registered.
-     *
-     * @param string $class The extension class name
-     *
-     * @return bool Whether the extension is registered or not
-     */
-    public function hasExtension($class)
+    public function hasExtension(string $class): bool
     {
         return isset($this->extensions[ltrim($class, '\\')]);
     }
 
-    /**
-     * Gets an extension by class name.
-     *
-     * @param string $class The extension class name
-     *
-     * @return Twig_ExtensionInterface A Twig_ExtensionInterface instance
-     */
-    public function getExtension($class)
+    public function getExtension(string $class): Twig_ExtensionInterface
     {
         $class = ltrim($class, '\\');
 
@@ -85,11 +71,6 @@ final class Twig_ExtensionSet
         return $this->extensions[$class];
     }
 
-    /**
-     * Registers an array of extensions.
-     *
-     * @param array $extensions An array of extensions
-     */
     public function setExtensions(array $extensions)
     {
         foreach ($extensions as $extension) {
@@ -97,22 +78,17 @@ final class Twig_ExtensionSet
         }
     }
 
-    /**
-     * Returns all registered extensions.
-     *
-     * @return array An array of extensions
-     */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
 
-    public function getSignature()
+    public function getSignature(): string
     {
         return json_encode(array_keys($this->extensions));
     }
 
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->initialized || $this->runtimeInitialized;
     }
@@ -133,11 +109,6 @@ final class Twig_ExtensionSet
         return $this->lastModified;
     }
 
-    /**
-     * Registers an extension.
-     *
-     * @param Twig_ExtensionInterface $extension A Twig_ExtensionInterface instance
-     */
     public function addExtension(Twig_ExtensionInterface $extension)
     {
         $class = get_class($extension);
@@ -162,7 +133,7 @@ final class Twig_ExtensionSet
         $this->staging->addFunction($function);
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -172,13 +143,9 @@ final class Twig_ExtensionSet
     }
 
     /**
-     * Get a function by name.
-     *
-     * @param string $name function name
-     *
      * @return Twig_Function|false A Twig_Function instance or false if the function does not exist
      */
-    public function getFunction($name)
+    public function getFunction(string $name)
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -222,7 +189,7 @@ final class Twig_ExtensionSet
         $this->staging->addFilter($filter);
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -232,16 +199,9 @@ final class Twig_ExtensionSet
     }
 
     /**
-     * Get a filter by name.
-     *
-     * Subclasses may override this method and load filters differently;
-     * so no list of filters is available.
-     *
-     * @param string $name The filter name
-     *
      * @return Twig_Filter|false A Twig_Filter instance or false if the filter does not exist
      */
-    public function getFilter($name)
+    public function getFilter(string $name)
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -285,7 +245,7 @@ final class Twig_ExtensionSet
         $this->staging->addNodeVisitor($visitor);
     }
 
-    public function getNodeVisitors()
+    public function getNodeVisitors(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -303,7 +263,7 @@ final class Twig_ExtensionSet
         $this->staging->addTokenParser($parser);
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -312,7 +272,7 @@ final class Twig_ExtensionSet
         return $this->parsers;
     }
 
-    public function getGlobals()
+    public function getGlobals(): array
     {
         if (null !== $this->globals) {
             return $this->globals;
@@ -348,7 +308,7 @@ final class Twig_ExtensionSet
         $this->staging->addTest($test);
     }
 
-    public function getTests()
+    public function getTests(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -358,13 +318,9 @@ final class Twig_ExtensionSet
     }
 
     /**
-     * Gets a test by name.
-     *
-     * @param string $name The test name
-     *
      * @return Twig_Test|false A Twig_Test instance or false if the test does not exist
      */
-    public function getTest($name)
+    public function getTest(string $name)
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -377,12 +333,7 @@ final class Twig_ExtensionSet
         return false;
     }
 
-    /**
-     * Gets the registered unary Operators.
-     *
-     * @return array An array of unary operators
-     */
-    public function getUnaryOperators()
+    public function getUnaryOperators(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();
@@ -391,12 +342,7 @@ final class Twig_ExtensionSet
         return $this->unaryOperators;
     }
 
-    /**
-     * Gets the registered binary Operators.
-     *
-     * @return array An array of binary operators
-     */
-    public function getBinaryOperators()
+    public function getBinaryOperators(): array
     {
         if (!$this->initialized) {
             $this->initExtensions();

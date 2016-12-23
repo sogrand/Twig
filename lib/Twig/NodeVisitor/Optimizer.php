@@ -44,7 +44,7 @@ final class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
         $this->optimizers = $optimizers;
     }
 
-    protected function doEnterNode(Twig_Node $node, Twig_Environment $env)
+    protected function doEnterNode(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         if (self::OPTIMIZE_FOR === (self::OPTIMIZE_FOR & $this->optimizers)) {
             $this->enterOptimizeFor($node, $env);
@@ -53,7 +53,7 @@ final class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
         return $node;
     }
 
-    protected function doLeaveNode(Twig_Node $node, Twig_Environment $env)
+    protected function doLeaveNode(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         if (self::OPTIMIZE_FOR === (self::OPTIMIZE_FOR & $this->optimizers)) {
             $this->leaveOptimizeFor($node, $env);
@@ -74,10 +74,8 @@ final class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
      * It replaces:
      *
      *   * "echo $this->render(Parent)Block()" with "$this->display(Parent)Block()"
-     *
-     * @return Twig_Node
      */
-    private function optimizePrintNode(Twig_Node $node, Twig_Environment $env)
+    private function optimizePrintNode(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         if (!$node instanceof Twig_Node_Print) {
             return $node;
@@ -98,10 +96,8 @@ final class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
 
     /**
      * Removes "raw" filters.
-     *
-     * @return Twig_Node
      */
-    private function optimizeRawFilter(Twig_Node $node, Twig_Environment $env)
+    private function optimizeRawFilter(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         if ($node instanceof Twig_Node_Expression_Filter && 'raw' == $node->getNode('filter')->getAttribute('value')) {
             return $node->getNode('node');
@@ -198,7 +194,7 @@ final class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
         }
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 255;
     }

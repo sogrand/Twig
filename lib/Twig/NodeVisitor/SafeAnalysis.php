@@ -57,12 +57,12 @@ final class Twig_NodeVisitor_SafeAnalysis extends Twig_BaseNodeVisitor
         );
     }
 
-    protected function doEnterNode(Twig_Node $node, Twig_Environment $env)
+    protected function doEnterNode(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         return $node;
     }
 
-    protected function doLeaveNode(Twig_Node $node, Twig_Environment $env)
+    protected function doLeaveNode(Twig_Node $node, Twig_Environment $env): Twig_Node
     {
         if ($node instanceof Twig_Node_Expression_Constant) {
             // constants are marked safe for all
@@ -137,7 +137,7 @@ final class Twig_NodeVisitor_SafeAnalysis extends Twig_BaseNodeVisitor
         return array_intersect($a, $b);
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 0;
     }

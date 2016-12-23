@@ -41,7 +41,7 @@ class Twig_Parser
         return sprintf('__internal_%s', hash('sha256', uniqid(mt_rand(), true), false));
     }
 
-    public function parse(Twig_TokenStream $stream, $test = null, $dropNeedle = false)
+    public function parse(Twig_TokenStream $stream, $test = null, $dropNeedle = false): Twig_Node_Module
     {
         $vars = get_object_vars($this);
         unset($vars['stack'], $vars['env'], $vars['handlers'], $vars['visitors'], $vars['expressionParser'], $vars['reservedMacroNames']);
@@ -107,7 +107,7 @@ class Twig_Parser
         return $node;
     }
 
-    public function subparse($test, $dropNeedle = false)
+    public function subparse($test, $dropNeedle = false): Twig_Node
     {
         $lineno = $this->getCurrentToken()->getLine();
         $rv = array();
@@ -277,10 +277,7 @@ class Twig_Parser
         array_shift($this->importedSymbols);
     }
 
-    /**
-     * @return Twig_ExpressionParser
-     */
-    public function getExpressionParser()
+    public function getExpressionParser(): Twig_ExpressionParser
     {
         return $this->expressionParser;
     }
@@ -295,18 +292,12 @@ class Twig_Parser
         $this->parent = $parent;
     }
 
-    /**
-     * @return Twig_TokenStream
-     */
-    public function getStream()
+    public function getStream(): Twig_TokenStream
     {
         return $this->stream;
     }
 
-    /**
-     * @return Twig_Token
-     */
-    public function getCurrentToken()
+    public function getCurrentToken(): Twig_Token
     {
         return $this->stream->getCurrent();
     }

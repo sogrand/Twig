@@ -32,7 +32,7 @@ final class Twig_Source
         $this->path = $path;
     }
 
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -42,7 +42,7 @@ final class Twig_Source
         return $this->name;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }

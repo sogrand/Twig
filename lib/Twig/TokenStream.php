@@ -21,10 +21,6 @@ final class Twig_TokenStream
     private $current = 0;
     private $source;
 
-    /**
-     * @param array       $tokens An array of tokens
-     * @param Twig_Source $source
-     */
     public function __construct(array $tokens, Twig_Source $source = null)
     {
         $this->tokens = $tokens;
@@ -43,10 +39,8 @@ final class Twig_TokenStream
 
     /**
      * Sets the pointer to the next token and returns the old one.
-     *
-     * @return Twig_Token
      */
-    public function next()
+    public function next(): Twig_Token
     {
         if (!isset($this->tokens[++$this->current])) {
             throw new Twig_Error_Syntax('Unexpected end of template.', $this->tokens[$this->current - 1]->getLine(), $this->source);
@@ -69,10 +63,8 @@ final class Twig_TokenStream
 
     /**
      * Tests a token and returns it or throws a syntax error.
-     *
-     * @return Twig_Token
      */
-    public function expect($type, $value = null, $message = null)
+    public function expect($type, $value = null, $message = null): Twig_Token
     {
         $token = $this->tokens[$this->current];
         if (!$token->test($type, $value)) {
@@ -92,12 +84,8 @@ final class Twig_TokenStream
 
     /**
      * Looks at the next token.
-     *
-     * @param int $number
-     *
-     * @return Twig_Token
      */
-    public function look($number = 1)
+    public function look(int $number = 1): Twig_Token
     {
         if (!isset($this->tokens[$this->current + $number])) {
             throw new Twig_Error_Syntax('Unexpected end of template.', $this->tokens[$this->current + $number - 1]->getLine(), $this->source);
@@ -108,40 +96,26 @@ final class Twig_TokenStream
 
     /**
      * Tests the current token.
-     *
-     * @return bool
      */
-    public function test($primary, $secondary = null)
+    public function test($primary, $secondary = null): bool
     {
         return $this->tokens[$this->current]->test($primary, $secondary);
     }
 
-    /**
-     * Checks if end of stream was reached.
-     *
-     * @return bool
-     */
-    public function isEOF()
+    public function isEOF(): bool
     {
         return $this->tokens[$this->current]->getType() === Twig_Token::EOF_TYPE;
     }
 
-    /**
-     * @return Twig_Token
-     */
-    public function getCurrent()
+    public function getCurrent(): Twig_Token
     {
         return $this->tokens[$this->current];
     }
 
     /**
-     * Gets the source associated with this stream.
-     *
-     * @return Twig_Source
-     *
      * @internal
      */
-    public function getSourceContext()
+    public function getSourceContext(): Twig_Source
     {
         return $this->source;
     }
