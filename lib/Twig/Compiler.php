@@ -175,7 +175,12 @@ class Twig_Compiler implements Twig_CompilerInterface
                 setlocale(LC_NUMERIC, 'C');
             }
 
-            $this->raw(var_export($value, true));
+            if (is_float($value)) {
+                $this->raw('(float) ');
+                $this->raw(var_export($value, true));
+            } else {
+                $this->raw($value);
+            }
 
             if (false !== $locale) {
                 setlocale(LC_NUMERIC, $locale);
