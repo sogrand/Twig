@@ -270,9 +270,6 @@ class Twig_Tests_Loader_FilesystemTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('hello from phar', $loader->getSourceContext('hello.twig')->getCode());
     }
 
-    /**
-     * @requires PHP 5.3
-     */
     public function testLoadTemplateFromPharNormalization()
     {
         $loader = new FilesystemLoader([]);
