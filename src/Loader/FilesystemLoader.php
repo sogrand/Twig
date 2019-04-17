@@ -28,25 +28,17 @@ class FilesystemLoader implements LoaderInterface, ExistsLoaderInterface, Source
     protected $cache = [];
     protected $errorCache = [];
 
-    private $useRealpath = false;
     private $rootPath;
 
     /**
      * @param string|array $paths    A path or an array of paths where to look for templates
      * @param string|null  $rootPath The root path common to all relative paths (null for getcwd())
      */
-    public function __construct($paths = [], $rootPath = null, $useRealpath = false)
+    public function __construct($paths = [], $rootPath = null)
     {
-        $this->useRealpath = $useRealpath;
-
-        $this->rootPath = (null === $rootPath ? getcwd() : $rootPath);
+        $this->rootPath = (null === $rootPath ? getcwd() : $rootPath).\DIRECTORY_SEPARATOR;
         if ($this->rootPath) {
-            // realpath() usage for backward compatibility only
-            if ($useRealpath && false !== ($realPath = realpath($this->rootPath))) {
-                $this->rootPath = $realPath.\DIRECTORY_SEPARATOR;
-            } else {
-                $this->rootPath = self::normalizePath($this->rootPath).\DIRECTORY_SEPARATOR;
-            }
+            $this->rootPath = self::normalizePath($this->rootPath).\DIRECTORY_SEPARATOR;
         }
 
         if ($paths) {
@@ -258,10 +250,6 @@ class FilesystemLoader implements LoaderInterface, ExistsLoaderInterface, Source
 
             $filename = $path.'/'.$shortname;
             if (is_file($filename)) {
-                if ($this->useRealpath && false !== ($realPath = realpath($filename))) {
-                    $filename = $realPath;
-                }
-
                 return $this->cache[$name] = self::normalizePath($filename);
             }
         }
@@ -319,16 +307,11 @@ class FilesystemLoader implements LoaderInterface, ExistsLoaderInterface, Source
     }
 
     /**
-     * Normalize a path by removing redundant '..', '.' and '/' and thus preventing the
+     * Normalizes a path by removing redundant '..', '.' and '/' and thus preventing the
      * need of using the realpath() function that may come with some side effects such
      * as breaking out open_basedir configuration by attempting to following symlinks.
-     *
-     * @param string $string
-     * @param bool   $removeTrailingSlash
-     *
-     * @return string
      */
-    public static function normalizePath($string)
+    private static function normalizePath($string)
     {
         // Handle windows gracefully
         if (\DIRECTORY_SEPARATOR !== '/') {

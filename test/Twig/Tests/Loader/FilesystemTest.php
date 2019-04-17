@@ -217,33 +217,33 @@ class Twig_Tests_Loader_FilesystemTest extends \PHPUnit\Framework\TestCase
 
     public function getPathNormalizationMap()
     {
-        return array(
+        return [
             // Tests with '..'
-            array('a/b/..', 'a'),
-            array('https://a/b/../', 'https://a'),
-            array('/a/b/c/d/../e/f', '/a/b/c/e/f'),
-            array('a/b/c/../../e/f', 'a/e/f'),
-            array('ftp://a/../b/../c/../e/f', 'ftp://e/f'),
-            array('a../b/c../d..e/', 'a../b/c../d..e'),
-            array('../c/d', '../c/d'),
+            ['a/b/..', 'a'],
+            ['https://a/b/../', 'https://a'],
+            ['/a/b/c/d/../e/f', '/a/b/c/e/f'],
+            ['a/b/c/../../e/f', 'a/e/f'],
+            ['ftp://a/../b/../c/../e/f', 'ftp://e/f'],
+            ['a../b/c../d..e/', 'a../b/c../d..e'],
+            ['../c/d', '../c/d'],
             // With multiple '/'
-            array('/a/b/////c/d/../e/f', '/a/b/c/e/f'),
-            array('file:////a/b/c//../..//e/f', 'file:///a/e/f'),
-            array('////a/../b/../c//../e/f', '/e/f'),
-            array('a../b//c../d..e/', 'a../b/c../d..e'),
-            array('../c////d', '../c/d'),
+            ['/a/b/////c/d/../e/f', '/a/b/c/e/f'],
+            ['file:////a/b/c//../..//e/f', 'file:///a/e/f'],
+            ['////a/../b/../c//../e/f', '/e/f'],
+            ['a../b//c../d..e/', 'a../b/c../d..e'],
+            ['../c////d', '../c/d'],
             // With dots
-            array('a/b/./././..', 'a'),
-            array('a/.b/./../', 'a'),
-            array('/a/b/.c/d/../e/f', '/a/b/.c/e/f'),
-            array('.a/./b/c/.././../e./f', '.a/e./f'),
+            ['a/b/./././..', 'a'],
+            ['a/.b/./../', 'a'],
+            ['/a/b/.c/d/../e/f', '/a/b/.c/e/f'],
+            ['.a/./b/c/.././../e./f', '.a/e./f'],
             // Special cases
-            array('/', '/'),
-            array('.', '.'),
-            array('..', '..'),
-            array('./', '.'),
-            array('../', '..'),
-        );
+            ['/', '/'],
+            ['.', '.'],
+            ['..', '..'],
+            ['./', '.'],
+            ['../', '..'],
+        ];
     }
 
     /**
@@ -251,21 +251,18 @@ class Twig_Tests_Loader_FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     public function testNormalizePath($path, $expected)
     {
-        $this->assertSame($expected, Twig_Loader_Filesystem::normalizePath($path));
-    }
+        $m = new \ReflectionMethod('Twig\Loader\FilesystemLoader', 'normalizePath');
+        $m->setAccessible(true);
 
-    public function getUseRealpathConfiguration()
-    {
-        return array(array(true), array(false));
+        $this->assertSame($expected, $m->invoke(null, $path));
     }
 
     /**
-     * @dataProvider getUseRealpathConfiguration
      * @requires PHP 5.3
      */
-    public function testLoadTemplateFromPhar($useRealpath)
+    public function testLoadTemplateFromPhar()
     {
-        $loader = new FilesystemLoader([], null, $useRealpath);
+        $loader = new FilesystemLoader([]);
         // phar-sample.phar was created with the following script:
         // $f = new Phar('phar-test.phar');
         // $f->addFromString('hello.twig', 'hello from phar');
@@ -274,13 +271,12 @@ class Twig_Tests_Loader_FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getUseRealpathConfiguration
      * @requires PHP 5.3
      */
-    public function testLoadTemplateFromPharNormalization($useRealpath)
+    public function testLoadTemplateFromPharNormalization()
     {
-        $loader = new Twig_Loader_Filesystem(array(), null, $useRealpath);
-        $loader->addPath('phar://'.dirname(__FILE__).'/Fixtures/phar/non-existing-segment/../phar-sample.phar');
+        $loader = new FilesystemLoader([]);
+        $loader->addPath('phar://'.__DIR__.'/Fixtures/phar/non-existing-segment/../phar-sample.phar');
         $this->assertSame('hello from phar', $loader->getSourceContext('hello.twig')->getCode());
         $this->assertSame('hello from phar', $loader->getSourceContext('another-non-existing-segment/../hello.twig')->getCode());
     }
