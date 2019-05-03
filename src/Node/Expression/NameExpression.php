@@ -17,6 +17,7 @@ use Twig\Compiler;
 class NameExpression extends AbstractExpression
 {
     protected $specialVars = [
+        '_' => '$_',
         '_self' => '$this',
         '_context' => '$context',
         '_charset' => '$this->env->getCharset()',

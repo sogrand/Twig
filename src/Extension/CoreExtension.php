@@ -194,6 +194,8 @@ class CoreExtension extends AbstractExtension
             new TwigFilter('sort', 'twig_sort_filter'),
             new TwigFilter('merge', 'twig_array_merge'),
             new TwigFilter('batch', 'twig_array_batch'),
+            new TwigFilter('filter', 'twig_array_filter'),
+            new TwigFilter('map', 'twig_array_map'),
 
             // string/array filters
             new TwigFilter('reverse', 'twig_reverse_filter', ['needs_environment' => true]),
@@ -1681,5 +1683,15 @@ function twig_array_batch($items, $size, $fill = null, $preserveKeys = true)
     }
 
     return $result;
+}
+
+function twig_array_filter($array, $arrow)
+{
+    return array_filter($array, $arrow);
+}
+
+function twig_array_map($array, $arrow)
+{
+    return array_map($arrow, $array);
 }
 }
